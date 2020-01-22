@@ -22,7 +22,7 @@ public class ImdbService {
 	}
 
 	public String getImdbId(String film) {
-		System.out.println(1 + film);
+
 		String filmId = "";
 		if(film.contains(" ")) {
 			String[] splited = film.split(" ");
@@ -44,8 +44,9 @@ public class ImdbService {
 			Iterator<JSONObject> iterator = search.iterator();
 			filmId = (String) iterator.next().get("imdbID");
 			System.out.println(filmId);
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			System.out.println("error");
+			return null;
 		}
 		return filmId;
 	}

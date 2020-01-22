@@ -2,6 +2,7 @@ package ch.bbw.filmFinder;
 
 import java.io.IOException;
 
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,11 +27,16 @@ public class FilmFinderController {
 	}
 	
 	@RequestMapping("/index")
-	public String showFilmInfos(@RequestParam(value = "userFilm", required = false ) String userFilm) throws IOException  {	
+	public String showFilmInfos(@RequestParam(value = "userFilm", required = false ) String userFilm, Model model) throws IOException  {	
 		if(userFilm != null) {
-			System.out.println(userFilm);
 			String id = imbdSerivce.getImdbId(userFilm);
-			System.out.println(imbdSerivce.getFilmInfos(id));
+			if(id == null) {
+				model.addAttribute("showError", "Please enter a valid Film");
+			} else {
+				model.addAttribute("showError", "");
+				JSONObject fimJsonObj = imbdSerivce.getFilmInfos(id);
+				model.addAttribute("fimJsonObj", fimJsonObj);
+			}
 		}
 		return "/index";
 	}
