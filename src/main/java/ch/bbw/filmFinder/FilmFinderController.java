@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import ch.bbw.filmFinder.services.CinemanService;
 import ch.bbw.filmFinder.services.ImdbService;
 
 @Controller
@@ -19,6 +20,9 @@ public class FilmFinderController {
 	
 	@Autowired
 	ImdbService imbdSerivce = new ImdbService();
+	
+	@Autowired
+	CinemanService cinemanService = new CinemanService();
 	
 	@GetMapping("/index")
 	public String getShowFilmInfos(Model model) throws IOException  {	
@@ -33,9 +37,11 @@ public class FilmFinderController {
 			if(id == null) {
 				model.addAttribute("showError", "Please enter a valid Film");
 			} else {
+				System.out.println(1);
 				model.addAttribute("showError", "");
 				JSONObject fimJsonObj = imbdSerivce.getFilmInfos(id);
 				model.addAttribute("fimJsonObj", fimJsonObj);
+				cinemanService.getCinemaWithTime((String) fimJsonObj.get("title"));
 			}
 		}
 		return "/index";

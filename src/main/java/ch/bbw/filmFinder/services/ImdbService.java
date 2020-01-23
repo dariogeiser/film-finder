@@ -15,7 +15,7 @@ import com.squareup.okhttp.Response;
 
 @Service
 public class ImdbService {
-	OkHttpClient client = null;
+	OkHttpClient client;
 
 	public ImdbService() {
 		this.client = new OkHttpClient();
