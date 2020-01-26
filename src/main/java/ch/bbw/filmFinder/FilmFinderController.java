@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import ch.bbw.filmFinder.models.Film;
 import ch.bbw.filmFinder.models.MainFilm;
 import ch.bbw.filmFinder.services.CinemanService;
+import ch.bbw.filmFinder.services.ExportFilmService;
 import ch.bbw.filmFinder.services.ImdbService;
 import ch.bbw.filmFinder.services.FilmHistoryService;
 
@@ -34,21 +35,33 @@ public class FilmFinderController {
 	@Autowired
 	FilmHistoryService filmHistory = new FilmHistoryService();
 
+	@Autowired
+	ExportFilmService exportFilm = new ExportFilmService();
+
 	@GetMapping("/index")
-	public String getShowFilmInfos(Model model) throws IOException {
+	public String getShowFilmInfos(@RequestParam(value = "name", required = false)String name, @RequestParam(value = "rating", required = false)String rating, Model model) throws IOException {
+		System.out.println(1 );
+		if(name != null) {
+		
+			exportFilm.exportXml(name, rating);
+		}
 		model.addAttribute("userFilm", "");
+		model.addAttribute("filmData", "");
 		return "/index";
 	}
 
 	@RequestMapping("/index")
 	public String showFilmInfos(@RequestParam(value = "userFilm", required = false) String userFilm, Model model)
 			throws IOException {
+		
+		
 		if (userFilm != null) {
 			String id = imbdSerivce.getImdbId(userFilm);
 			if (id == null) {
 				model.addAttribute("showError", "Please enter a valid Film");
 			} else {
 				// JSON
+				model.addAttribute("userFilm", userFilm);
 				model.addAttribute("showError", "");
 				JSONObject fimJsonObj = imbdSerivce.getFilmInfos(id);
 				model.addAttribute("fimJsonObj", fimJsonObj);
@@ -65,15 +78,15 @@ public class FilmFinderController {
 				filmHistory.addMainFilm(mainFilmTable);
 
 				Iterable<MainFilm> films = filmHistory.getFilms();
+				model.addAttribute("filmsFromDb", films);
 				
-				for(MainFilm film1: films) {
-					System.out.println(film1.getFilm().getName());
-				}
+				
 				
 			}
 		}
 
 		return "/index";
 	}
+	
 
 }
