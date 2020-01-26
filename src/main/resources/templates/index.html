@@ -39,7 +39,13 @@
 						<li class="list-group-item"><b>IMDb Rating: </b><span th:text="${fimJsonObj.get('imdbRating')}"></span>/10</li>													
 					</ul>
 				</div>
-				<div class="col-6">2 of 3 (wider)</div>
+				<div class="col-6">
+					<div th:if="${cinemas != null}" >
+						<ul class="list-group" th:each="cinema : ${cinemas}">
+							<li class="list-group-item"><a th:href="${cinema.value}" th:text="${cinema.key}"></a></li>				
+						</ul>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>

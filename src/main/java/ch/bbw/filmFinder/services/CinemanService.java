@@ -15,28 +15,38 @@ import org.jsoup.nodes.Element;
 
 @Service
 public class CinemanService {
-	private final static String URL = "https://www.kitag.com/en/program/now-playing/#?view=grid";
-	private HashMap<String, List<String>> cinemasWithTime;
+	private String URL;
+	private HashMap<String, String> cinemasWithLink;
+
 
 	public CinemanService() {
-		cinemasWithTime = new HashMap<String, List<String>>();
+		URL = "";
+		cinemasWithLink = new HashMap<String, String>();
 	}
 
-	public HashMap<String, List<String>> getCinemaWithTime(String film) {
+	public HashMap<String, String> getCinemaWithTime(String film) {	
+		cinemasWithLink.clear();;
+;		film = film.replaceAll("\\s+","");
+		URL = "https://www.cineman.ch/en/movie/2019/" + film + "/cinema.html";
 		Document  doc;
 		try {
 			doc = Jsoup.connect(URL).get();
 
 			// List<String> cinemas = new ArrayList<>();
-			Element[] elements = doc.select("table.program-table").toArray(new Element[0]);
-			for (Element e : elements) {
-				System.out.println(e);
+			Element[] elements = doc.select("h5 a.link").toArray(new Element[0]);
+			for(Element element : elements) {
+				if(element.text().equals("KITAG CINEMAS Abaton") ||  element.text().equals("Arthouse Movie") || element.text().equals("KITAG CINEMAS Corso") || element.text().equals("Riffraff")) {
+					String link = element.attr("href");
+					if(!link.startsWith("http")) {
+						link = "https://www.cineman.ch" + link;
+					}
+					cinemasWithLink.put(element.text(), link);
+				}
 			}
-		} catch (IOException e1) {
+		} catch (Exception e1) {
 
-			e1.printStackTrace();
 		}
-		return cinemasWithTime;
+		return cinemasWithLink;
 	}
 
 }
