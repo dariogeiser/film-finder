@@ -13,6 +13,10 @@ import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
+/**
+ * @author 5ia17dageiser
+ *
+ */
 @Service
 public class ImdbService {
 	OkHttpClient client;
@@ -21,14 +25,18 @@ public class ImdbService {
 		this.client = new OkHttpClient();
 	}
 
+	/**
+	 * @param film
+	 * @return
+	 */
 	public String getImdbId(String film) {
 
 		String filmId = "";
-		if(film.contains(" ")) {
+		if (film.contains(" ")) {
 			String[] splited = film.split(" ");
 			film = "";
-			for(String val : splited) {
-				film +=  val + "%20";
+			for (String val : splited) {
+				film += val + "%20";
 			}
 			film = film.substring(0, film.length() - 3);
 		}
@@ -51,6 +59,10 @@ public class ImdbService {
 		return filmId;
 	}
 
+	/**
+	 * @param id
+	 * @return
+	 */
 	public JSONObject getFilmInfos(String id) {
 		JSONObject filmInfosJson = null;
 		try {
@@ -58,7 +70,7 @@ public class ImdbService {
 					.url("https://movie-database-imdb-alternative.p.rapidapi.com/?i=" + id + "&r=json").get()
 					.addHeader("x-rapidapi-host", "movie-database-imdb-alternative.p.rapidapi.com")
 					.addHeader("x-rapidapi-key", "76548df5a4msh7fb56fc2794b204p1d3423jsn99afe8e6de92").build();
-			
+
 			Response response = client.newCall(request).execute();
 			filmInfosJson = stringToJson(response.body().string());
 			System.out.println(filmInfosJson);
@@ -69,6 +81,10 @@ public class ImdbService {
 		return filmInfosJson;
 	}
 
+	/**
+	 * @param value
+	 * @return
+	 */
 	private JSONObject stringToJson(String value) {
 		JSONObject json = null;
 		try {

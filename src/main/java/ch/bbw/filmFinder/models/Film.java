@@ -7,32 +7,32 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-
-
+/**
+ * @author 5ia17dageiser
+ *
+ */
 @Entity
 @Table(name = "film")
 public class Film {
-	
+
 	@Id
 	@GeneratedValue
 	private int id;
-	
+
 	private String name;
 	private String rating;
-	
-    @OneToOne(fetch= FetchType.LAZY, mappedBy = "film")
-    private MainFilm mainFilm;
-    
+
+	@OneToOne(fetch = FetchType.LAZY, mappedBy = "film")
+	private MainFilm mainFilm;
+
 	public Film() {
-		
+
 	}
-	
+
 	public Film(String name, String rating) {
 		this.name = name;
 		this.rating = rating;
 	}
-	
-
 
 	public MainFilm getMainFilm() {
 		return mainFilm;
@@ -53,9 +53,5 @@ public class Film {
 	public String getRating() {
 		return rating;
 	}
-	
-	
-	
-	
-	
+
 }

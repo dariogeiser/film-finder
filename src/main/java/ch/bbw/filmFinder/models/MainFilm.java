@@ -9,18 +9,20 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+/**
+ * @author 5ia17dageiser
+ *
+ */
 @Entity
 @Table(name = "film_mainlist")
 public class MainFilm {
-	
+
 	@Id
 	@GeneratedValue
 	private int id;
-	
 
-	
-    @OneToOne(fetch= FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "film_id", referencedColumnName = "id")
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "film_id", referencedColumnName = "id")
 	private Film film;
 
 	public Film getFilm() {
@@ -31,6 +33,4 @@ public class MainFilm {
 		this.film = film;
 	}
 
-    
-    
 }

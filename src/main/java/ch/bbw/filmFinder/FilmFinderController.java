@@ -1,18 +1,15 @@
 package ch.bbw.filmFinder;
 
 import java.io.IOException;
-import java.util.ArrayList;
+
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -23,6 +20,10 @@ import ch.bbw.filmFinder.services.ExportFilmService;
 import ch.bbw.filmFinder.services.ImdbService;
 import ch.bbw.filmFinder.services.FilmHistoryService;
 
+/**
+ * @author 5ia17dageiser
+ *
+ */
 @Controller
 public class FilmFinderController {
 
@@ -38,11 +39,19 @@ public class FilmFinderController {
 	@Autowired
 	ExportFilmService exportFilm = new ExportFilmService();
 
+	/**
+	 * @param name
+	 * @param rating
+	 * @param model
+	 * @return
+	 * @throws IOException
+	 */
 	@GetMapping("/index")
-	public String getShowFilmInfos(@RequestParam(value = "name", required = false)String name, @RequestParam(value = "rating", required = false)String rating, Model model) throws IOException {
-		System.out.println(1 );
-		if(name != null) {
-		
+	public String getShowFilmInfos(@RequestParam(value = "name", required = false) String name,
+			@RequestParam(value = "rating", required = false) String rating, Model model) throws IOException {
+
+		// XML
+		if (name != null && rating != null) {
 			exportFilm.exportXml(name, rating);
 		}
 		model.addAttribute("userFilm", "");
@@ -53,8 +62,7 @@ public class FilmFinderController {
 	@RequestMapping("/index")
 	public String showFilmInfos(@RequestParam(value = "userFilm", required = false) String userFilm, Model model)
 			throws IOException {
-		
-		
+
 		if (userFilm != null) {
 			String id = imbdSerivce.getImdbId(userFilm);
 			if (id == null) {
@@ -70,7 +78,7 @@ public class FilmFinderController {
 				HashMap<String, String> cinemas = cinemanService.getCinemaWithTime(userFilm);
 				model.addAttribute("cinemas", cinemas);
 
-				// MySQL / XML
+				// MySQL
 				Film film = new Film((String) fimJsonObj.get("Title"), (String) fimJsonObj.get("imdbRating"));
 				MainFilm mainFilmTable = new MainFilm();
 				mainFilmTable.setFilm(film);
@@ -79,14 +87,11 @@ public class FilmFinderController {
 
 				Iterable<MainFilm> films = filmHistory.getFilms();
 				model.addAttribute("filmsFromDb", films);
-				
-				
-				
+
 			}
 		}
 
 		return "/index";
 	}
-	
 
 }

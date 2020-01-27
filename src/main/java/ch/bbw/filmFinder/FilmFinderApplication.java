@@ -1,16 +1,18 @@
 package ch.bbw.filmFinder;
 
-
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-
+/**
+ * @author 5ia17dageiser
+ *
+ */
 @SpringBootApplication
 public class FilmFinderApplication {
 
+	/**
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		SpringApplication.run(FilmFinderApplication.class, args);
 	}
